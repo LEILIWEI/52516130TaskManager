@@ -157,8 +157,6 @@ Replace the placeholder with your own Gemini API key.
 
 ### Home Page
 
-Insert screenshot here.
-
 ---
 
 ### Task Management
@@ -167,7 +165,7 @@ Insert screenshot here.
 
 ### AI Task Breakdown
 
-![Home Page]<img width="896" height="551" alt="屏幕截图 2026-06-03 173706" src="https://github.com/user-attachments/assets/baf3cb93-cf2b-4ce2-874d-8d7659212a3a" />
+[Home Page]<img width="896" height="551" alt="屏幕截图 2026-06-03 173706" src="https://github.com/user-attachments/assets/baf3cb93-cf2b-4ce2-874d-8d7659212a3a" />
 ---
 
 ## Demo Scenario
