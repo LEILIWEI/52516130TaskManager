@@ -159,7 +159,8 @@ Replace the placeholder with your own Gemini API key.
 
 Insert screenshot here.
 
-![Home Page](assets/screenshot1.png)
+![Home Page](assets/screenshot1.png)<img width="896" height="551" alt="屏幕截图 2026-06-03 173706" src="https://github.com/user-attachments/assets/baf3cb93-cf2b-4ce2-874d-8d7659212a3a" />
+
 
 ---
 
