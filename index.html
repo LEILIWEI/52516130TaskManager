@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Task Manager</title>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Settings Modal Toggle -->
+        <button id="settings-btn" class="settings-toggle" title="Settings">
+            <i class="fas fa-cog"></i>
+        </button>
+        <!-- Theme Toggle -->
+        <button id="theme-toggle-btn" class="theme-toggle" title="Toggle Theme">
+            <i class="fas fa-moon"></i>
+        </button>
+
+        <header>
+            <h1>AI Task Manager</h1>
+            <div class="stats-container">
+                <div class="progress-ring">
+                    <svg viewBox="0 0 36 36">
+                        <path class="ring-bg"
+                            d="M18 2.0845
+                            a 15.9155 15.9155 0 0 1 0 31.831
+                            a 15.9155 15.9155 0 0 1 0 -31.831"
+                        />
+                        <path class="ring-progress" id="progress-ring-path"
+                            stroke-dasharray="0, 100"
+                            d="M18 2.0845
+                            a 15.9155 15.9155 0 0 1 0 31.831
+                            a 15.9155 15.9155 0 0 1 0 -31.831"
+                        />
+                    </svg>
+                    <div class="progress-text">
+                        <span id="completed-count">0</span>/<span id="total-count">0</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <!-- Task Input Area -->
+            <section class="card input-section">
+                <h2>Add New Task</h2>
+                <form id="task-form">
+                    <div class="input-group">
+                        <input type="text" id="task-input" placeholder="What needs to be done?" required autocomplete="off">
+                        <input type="date" id="due-date-input" title="Due Date">
+                        <select id="priority-select" title="Priority">
+                            <option value="Low">Low</option>
+                            <option value="Medium" selected>Medium</option>
+                            <option value="High">High</option>
+                        </select>
+                        <select id="category-select" required title="Category">
+                            <option value="Study">Study</option>
+                            <option value="Assignment">Assignment</option>
+                            <option value="Work">Work</option>
+                            <option value="Personal">Personal</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-plus"></i> Add</button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Main Layout Grid -->
+            <div class="main-grid">
+                <!-- Task List Area -->
+                <section class="card task-list-section">
+                    <div class="section-header">
+                        <h2>Your Tasks</h2>
+                        <div class="filter-group">
+                            <select id="filter-select">
+                                <option value="All">All Categories</option>
+                                <option value="Study">Study</option>
+                                <option value="Assignment">Assignment</option>
+                                <option value="Work">Work</option>
+                                <option value="Personal">Personal</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <ul id="task-list" class="task-list">
+                        <!-- Tasks will be injected here -->
+                    </ul>
+                    <div id="empty-state" class="empty-state">
+                        <i class="fas fa-clipboard-list"></i>
+                        <p>No tasks yet. Add one above!</p>
+                    </div>
+                </section>
+
+                <!-- AI Assistant Area -->
+                <section class="card ai-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-magic"></i> AI Breakdown</h2>
+                    </div>
+                    <p class="ai-description">Enter a large or complex task, and AI will break it down into manageable steps.</p>
+                    <div class="ai-input-group">
+                        <textarea id="ai-task-input" placeholder="e.g., Prepare Network Report..." rows="3" required></textarea>
+                        <button id="ai-generate-btn" class="btn btn-gradient">
+                            <i class="fas fa-bolt"></i> Generate Subtasks
+                        </button>
+                    </div>
+                    
+                    <div id="ai-loading" class="loading-spinner hidden">
+                        <div class="spinner"></div>
+                        <p>AI is thinking...</p>
+                    </div>
+
+                    <div id="ai-results" class="ai-results hidden">
+                        <h3>Generated Steps:</h3>
+                        <ul id="ai-subtasks-list" class="ai-subtasks-list">
+                            <!-- AI Subtasks injected here -->
+                        </ul>
+                        <button id="add-all-ai-btn" class="btn btn-secondary hidden">Add All to Tasks</button>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal hidden">
+        <div class="modal-content card">
+            <div class="modal-header">
+                <h2>Settings</h2>
+                <button class="close-btn" id="close-settings"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="api-key-input">Gemini API Key</label>
+                    <input type="password" id="api-key-input" placeholder="Enter your Gemini API key...">
+                    <small>Stored locally in your browser. Required for the AI Breakdown feature.</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="save-settings-btn" class="btn btn-primary">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast hidden">
+        <div class="toast-content">
+            <i id="toast-icon" class="fas fa-info-circle"></i>
+            <span id="toast-message">Message</span>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
