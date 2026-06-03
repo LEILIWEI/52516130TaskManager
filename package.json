@@ -1,0 +1,15 @@
+{
+  "name": "ai-task-manager",
+  "version": "1.0.0",
+  "description": "AI Task Manager",
+  "main": "app.js",
+  "scripts": {
+    "dev": "http-server -p 8080",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1",
+    "jsdom": "^22.1.0",
+    "vitest": "^0.34.6"
+  }
+}

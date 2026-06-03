@@ -473,3 +473,15 @@ function escapeHTML(str) {
 
 // Run app
 init();
+
+// Expose functions to window object for testing and inline event handler support
+if (typeof window !== 'undefined') {
+    window.toggleTask = toggleTask;
+    window.deleteTask = deleteTask;
+    window.addAISubtask = addAISubtask;
+}
+if (typeof document !== 'undefined' && document.defaultView) {
+    document.defaultView.toggleTask = toggleTask;
+    document.defaultView.deleteTask = deleteTask;
+    document.defaultView.addAISubtask = addAISubtask;
+}
