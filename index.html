@@ -25,6 +25,10 @@
 
         <header>
             <h1>AI Task Manager</h1>
+            <div id="connection-status" class="connection-status" title="Supabase Cloud Sync Status">
+                <span id="connection-dot" class="connection-dot dot-offline"></span>
+                <span id="connection-text" class="connection-text">Offline</span>
+            </div>
             <div class="stats-container">
                 <div class="progress-ring">
                     <svg viewBox="0 0 36 36">
@@ -136,14 +140,38 @@
                 <button class="close-btn" id="close-settings"><i class="fas fa-times"></i></button>
             </div>
             <div class="modal-body">
+                <div class="modal-section-title"><i class="fas fa-robot"></i> AI Integration</div>
                 <div class="form-group">
                     <label for="api-key-input">Gemini API Key</label>
                     <input type="password" id="api-key-input" placeholder="Enter your Gemini API key...">
                     <small>Stored locally in your browser. Required for the AI Breakdown feature.</small>
                 </div>
+
+                <hr class="modal-divider">
+
+                <div class="modal-section-title"><i class="fas fa-cloud"></i> Cloud Storage (Supabase)</div>
+                <div class="supabase-status-banner" id="supabase-status-banner">
+                    <span id="banner-dot" class="connection-dot dot-offline"></span>
+                    <span id="banner-status-text">Not connected</span>
+                </div>
+                <div class="form-group">
+                    <label for="supabase-url-input">Supabase Project URL</label>
+                    <input type="text" id="supabase-url-input" placeholder="https://xxxxxxxxxxxx.supabase.co">
+                    <small>Found in Project Settings → API → Project URL</small>
+                </div>
+                <div class="form-group">
+                    <label for="supabase-key-input">Supabase Anon Key</label>
+                    <input type="password" id="supabase-key-input" placeholder="Enter your anon/public key...">
+                    <small>Your public key is safe to use in the browser with Row Level Security enabled.</small>
+                </div>
+                <div class="supabase-guide-link">
+                    <i class="fas fa-book-open"></i>
+                    <span>Setup guide: run <code>schema.sql</code> in your Supabase SQL Editor, then enable <strong>Anonymous Sign-ins</strong> in Authentication → Providers.</span>
+                </div>
             </div>
             <div class="modal-footer">
-                <button id="save-settings-btn" class="btn btn-primary">Save Changes</button>
+                <button id="save-settings-btn" class="btn btn-primary">Save API Key</button>
+                <button id="save-supabase-btn" class="btn btn-cloud"><i class="fas fa-cloud-upload-alt"></i> Connect to Cloud</button>
             </div>
         </div>
     </div>
@@ -156,6 +184,10 @@
         </div>
     </div>
 
+    <!-- Supabase CDN (UMD build) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+    <!-- Supabase DB Module -->
+    <script src="supabase-db.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

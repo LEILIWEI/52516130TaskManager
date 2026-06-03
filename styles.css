@@ -607,6 +607,134 @@ body.light-theme .priority-low { background: rgba(16, 185, 129, 0.15); color: #0
 .modal-footer {
     display: flex;
     justify-content: flex-end;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+/* Connection Status Indicator */
+.connection-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.9rem;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    backdrop-filter: blur(8px);
+    transition: var(--transition);
+    cursor: default;
+    user-select: none;
+}
+
+.connection-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+    transition: background-color 0.4s ease;
+}
+
+.dot-connected {
+    background-color: #10b981;
+    box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
+}
+
+.dot-connecting {
+    background-color: #f59e0b;
+    animation: pulse-dot 1.2s ease-in-out infinite;
+}
+
+.dot-offline {
+    background-color: #6b7280;
+}
+
+@keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.8); }
+}
+
+/* Supabase settings in modal */
+.modal-section-title {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.modal-divider {
+    border: none;
+    border-top: 1px solid var(--card-border);
+    margin: 1.5rem 0;
+}
+
+.supabase-status-banner {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.6rem 1rem;
+    background: var(--task-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: 1.25rem;
+}
+
+.supabase-guide-link {
+    display: flex;
+    gap: 0.6rem;
+    align-items: flex-start;
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    background: var(--task-bg);
+    border-left: 3px solid var(--primary-color);
+    padding: 0.75rem 1rem;
+    border-radius: 0 8px 8px 0;
+    margin-top: -0.5rem;
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+}
+
+.supabase-guide-link i {
+    margin-top: 2px;
+    flex-shrink: 0;
+    color: var(--primary-color);
+}
+
+.supabase-guide-link code {
+    background: rgba(99, 102, 241, 0.15);
+    color: var(--primary-color);
+    padding: 0.1rem 0.35rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+}
+
+/* Cloud Connect Button */
+.btn-cloud {
+    background: linear-gradient(135deg, #0ea5e9, #10b981);
+    color: white;
+}
+
+.btn-cloud:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.35);
+}
+
+/* Modal scroll for taller content */
+.modal-body {
+    max-height: 70vh;
+    overflow-y: auto;
+    padding-right: 0.25rem;
 }
 
 /* Toast Notification */
