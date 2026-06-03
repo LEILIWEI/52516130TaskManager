@@ -44,8 +44,16 @@ const toastIcon = document.getElementById('toast-icon');
 // ─── State ───────────────────────────────────────────────────────────────────
 let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
 let apiKey = localStorage.getItem('gemini_api_key') || '';
-let supabaseUrl = localStorage.getItem('supabase_url') || '';
-let supabaseAnonKey = localStorage.getItem('supabase_anon_key') || '';
+
+// 优先从 env.js (window.__ENV__) 读取 Supabase 配置，回退到 localStorage
+const _envCfg = (typeof window !== 'undefined' && window.__ENV__) || {};
+const _envUrl = (_envCfg.SUPABASE_URL || '').trim();
+const _envKey = (_envCfg.SUPABASE_ANON_KEY || '').trim();
+let supabaseUrl = _envUrl || localStorage.getItem('supabase_url') || '';
+let supabaseAnonKey = _envKey || localStorage.getItem('supabase_anon_key') || '';
+// 标记是否通过 env.js 提供配置（此时设置面板输入框将只读）
+const supabaseFromEnv = Boolean(_envUrl && _envKey);
+
 let isDarkMode = localStorage.getItem('theme') !== 'light';
 let generatedSubtasks = [];
 
@@ -59,6 +67,18 @@ async function init() {
     apiKeyInput.value = apiKey;
     supabaseUrlInput.value = supabaseUrl;
     supabaseKeyInput.value = supabaseAnonKey;
+
+    // 若配置来自 env.js，将输入框设为只读并加提示
+    if (supabaseFromEnv) {
+        supabaseUrlInput.readOnly = true;
+        supabaseKeyInput.readOnly = true;
+        supabaseUrlInput.title = '已通过 env.js 配置，如需修改请编辑该文件';
+        supabaseKeyInput.title = '已通过 env.js 配置，如需修改请编辑该文件';
+        if (saveSupabaseBtn) {
+            saveSupabaseBtn.disabled = true;
+            saveSupabaseBtn.title = '配置已由 env.js 提供';
+        }
+    }
 
     // Apply saved theme
     if (!isDarkMode) {
