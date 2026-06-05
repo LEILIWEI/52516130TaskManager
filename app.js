@@ -43,7 +43,10 @@ const toastIcon = document.getElementById('toast-icon');
 
 // ─── State ───────────────────────────────────────────────────────────────────
 let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-let apiKey = localStorage.getItem('gemini_api_key') || '';
+// 优先从 env.js (window.__ENV__) 读取 Gemini API Key，回退到 localStorage
+const _envGeminiKey = ((typeof window !== 'undefined' && window.__ENV__) || {}).GEMINI_API_KEY || '';
+let apiKey = _envGeminiKey.trim() || localStorage.getItem('gemini_api_key') || '';
+const geminiKeyFromEnv = Boolean(_envGeminiKey.trim());
 
 // 优先从 env.js (window.__ENV__) 读取 Supabase 配置，回退到 localStorage
 const _envCfg = (typeof window !== 'undefined' && window.__ENV__) || {};
@@ -67,6 +70,16 @@ async function init() {
     apiKeyInput.value = apiKey;
     supabaseUrlInput.value = supabaseUrl;
     supabaseKeyInput.value = supabaseAnonKey;
+
+    // 若 Gemini Key 来自 env.js，将输入框设为只读
+    if (geminiKeyFromEnv) {
+        apiKeyInput.readOnly = true;
+        apiKeyInput.title = '已通过 env.js 配置，如需修改请编辑该文件';
+        if (saveSettingsBtn) {
+            saveSettingsBtn.disabled = true;
+            saveSettingsBtn.title = 'API Key 已由 env.js 提供';
+        }
+    }
 
     // 若配置来自 env.js，将输入框设为只读并加提示
     if (supabaseFromEnv) {
@@ -146,8 +159,8 @@ async function initSupabase() {
 function updateConnectionStatus(status) {
     const config = {
         connecting: { dotClass: 'dot-connecting', label: 'Connecting...' },
-        connected:  { dotClass: 'dot-connected',  label: 'Cloud Sync ✓' },
-        offline:    { dotClass: 'dot-offline',     label: 'Offline' },
+        connected: { dotClass: 'dot-connected', label: 'Cloud Sync ✓' },
+        offline: { dotClass: 'dot-offline', label: 'Offline' },
     };
 
     const { dotClass, label } = config[status] || config.offline;
@@ -160,8 +173,8 @@ function updateConnectionStatus(status) {
     bannerDot.className = `connection-dot ${dotClass}`;
     bannerStatusText.textContent =
         status === 'connected' ? 'Connected to Supabase' :
-        status === 'connecting' ? 'Connecting...' :
-        'Not connected — tasks saved locally only';
+            status === 'connecting' ? 'Connecting...' :
+                'Not connected — tasks saved locally only';
 }
 
 // ─── Event Listeners ──────────────────────────────────────────────────────────
@@ -492,7 +505,7 @@ async function handleAIGeneration() {
 }
 
 async function fetchGeminiBreakdown(taskDescription) {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
 
     const prompt = `
     I have a large task: "${taskDescription}".
@@ -511,7 +524,11 @@ async function fetchGeminiBreakdown(taskDescription) {
         }),
     });
 
-    if (!response.ok) throw new Error('API Request Failed');
+    if (!response.ok) {
+        const errText = await response.text().catch(() => '');
+        console.error('API Error Response:', errText);
+        throw new Error(`API Request Failed: ${response.status} ${response.statusText}. Response: ${errText}`);
+    }
 
     const data = await response.json();
     try {
@@ -634,6 +651,8 @@ function escapeHTML(str) {
         tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
     );
 }
+
+console.log(apiKey);
 
 // ─── Boot ─────────────────────────────────────────────────────────────────────
 init();

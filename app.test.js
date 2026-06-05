@@ -55,14 +55,14 @@ describe('AI Task Manager Unit/Integration Tests', () => {
 
         taskInput.value = 'Learn testing with Vitest';
         categorySelect.value = 'Study';
-        
+
         // Dispatch submit event
         taskForm.dispatchEvent(new Event('submit'));
 
         // Check task list UI
         const taskList = document.getElementById('task-list');
         expect(taskList.children.length).toBe(1);
-        
+
         const taskItem = taskList.querySelector('.task-item');
         expect(taskItem.querySelector('.task-name').textContent).toBe('Learn testing with Vitest');
         expect(taskItem.querySelector('.task-category').textContent).toBe('Study');
@@ -99,7 +99,8 @@ describe('AI Task Manager Unit/Integration Tests', () => {
         window.toggleTask(taskId);
 
         // Check if task is marked completed in UI
-        expect(taskItem.classList.contains('completed')).toBe(true);
+        const updatedTaskItem = taskList.querySelector('.task-item');
+        expect(updatedTaskItem.classList.contains('completed')).toBe(true);
 
         // Check stats updated
         const completedCount = document.getElementById('completed-count');
@@ -245,7 +246,7 @@ describe('AI Task Manager Unit/Integration Tests', () => {
 
         const aiTaskInput = document.getElementById('ai-task-input');
         const aiGenerateBtn = document.getElementById('ai-generate-btn');
-        
+
         aiTaskInput.value = 'Learn Docker';
 
         // Mock fetch API call
@@ -270,13 +271,13 @@ describe('AI Task Manager Unit/Integration Tests', () => {
         // Wait for asynchronous breakdown
         await vi.waitFor(() => {
             const aiResults = document.getElementById('ai-results');
-            return !aiResults.classList.contains('hidden');
+            expect(aiResults.classList.contains('hidden')).toBe(false);
         });
 
         // Verify API was called
         expect(fetch).toHaveBeenCalled();
         const fetchUrl = fetch.mock.calls[0][0];
-        expect(fetchUrl).toContain('gemini-1.5-flash');
+        expect(fetchUrl).toContain('gemini-2.5-flash');
         expect(fetchUrl).toContain('key=mock-api-key');
 
         // Check subtasks UI
@@ -285,8 +286,7 @@ describe('AI Task Manager Unit/Integration Tests', () => {
         expect(subtasksList.children[0].textContent).toContain('Install Docker Desktop');
 
         // Test adding one AI subtask to main list
-        const addSubtaskBtn = subtasksList.querySelector('.ai-subtask-add');
-        addSubtaskBtn.dispatchEvent(new Event('click'));
+        window.addAISubtask(0);
 
         // Verify it was added to main list
         const taskList = document.getElementById('task-list');

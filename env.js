@@ -11,4 +11,5 @@
 window.__ENV__ = {
     SUPABASE_URL: 'https://dhvhpltqjkhksgsjigdq.supabase.co',       // 填入你的 Supabase Project URL，例如: https://xxxx.supabase.co
     SUPABASE_ANON_KEY: 'sb_publishable_EfgyDq9EzRAuUAx-6Sn8HQ_3A9YXHjY',  // 填入你的 Supabase Anon (public) Key
+    GEMINI_API_KEY: 'AQ.Ab8RN6Jf64NDQC1McxrKAKIBpLdBHN-_qdsC8Q-6Fn99-tqdkQ',  // Gemini API Key（已内置，无需在设置中手动输入）
 };
