@@ -231,3 +231,5 @@ Add generated subtasks into the task list.
 Student Project for Vibe Coding Assignment
 
 Developed with the assistance of Generative AI.
+
+https://52516130-task-manager.vercel.app/
